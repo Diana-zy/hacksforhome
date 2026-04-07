@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head {{ HEAD_ATTRS }}>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    {{ HEAD }}
+    <script src="/trackEvent.js"></script>
+    <script src="/linkMarking.js"></script>
+    <script src="/dataMonitor.js"></script>
+    <script>
+      const searchParams = new URLSearchParams(window.location.search);
+      const ttclid = searchParams.get("ttclid"); //TikTok
+      if (ttclid) {
+        window.setCookie("hi_ttclid", ttclid);
+      }
+      const tblci = searchParams.get("tblci"); //Taboola
+      const dicbo = searchParams.get("dicbo"); //Outbrain
+      tblci && window.setCookie("hi_tblci", tblci);
+      dicbo && window.setCookie("hi_dicbo", dicbo);
+      const script = document.createElement("script");
+      script.src = "https://wc.bunchthings.com/youknowwho.js?" + Date.now();
+      document.head.appendChild(script);
+      script.onload = function () {
+        pushEventToGTM("Page_View_Ip", {
+          hi_ip: window.youknowwho_ip || "unknown",
+          hi_country: window.youknowwho_ip_country || "unknown"
+        });
+        // window.dataLayer.push({
+        //   event: "Page_View_Ip",
+        //   hi_ip: window.youknowwho_ip || "unknown",
+        //   hi_country: window.youknowwho_ip_country || "unknown"
+        // });
+      };
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3BPZNSBTDE"></script>
+    <script>
+      //获取用户属性
+      function getUserProperty() {
+        const hi_user_source = getValueByURLOrCookie("hi_source");
+        const hi_user_sub_site = getHostname();
+        const hi_user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown";
+        const {
+          hi_source_clid: hi_user_source_clid,
+          hi_source_aid: hi_user_source_aid,
+          hi_source_site: hi_user_source_site,
+          hi_source_site_name: hi_user_source_site_name,
+          hi_section_id: hi_user_section,
+          hi_section_name: hi_user_section_name
+        } = getInfoBySource(hi_user_source);
+        return {
+          hi_user_source,
+          hi_user_sub_site,
+          hi_user_timezone,
+          hi_user_source_clid,
+          hi_user_source_aid,
+          hi_user_source_site,
+          hi_user_source_site_name,
+          hi_user_section,
+          hi_user_section_name
+        };
+      }
+      window.dataLayer = window.dataLayer || [];
+      function legacyUUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+      let uuid = window.getCookie("hi_user_id");
+      if (!uuid) {
+        uuid = legacyUUID().replace(/-/g, "");
+        window.setCookie("hi_user_id", uuid);
+      }
+      const userProperties = {
+        ...getUserProperty(),
+        hi_user_id: uuid,
+        hi_channel_user: getValueByURLOrCookie("channel")
+      };
+      gtag("set", "user_properties", {
+        ...userProperties
+      });
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag("js", new Date());
+      gtag("config", "G-3BPZNSBTDE");
+      //拦截fetch
+      (function () {
+        const { fetch: originalFetch } = window;
+        window.fetch = async (...args) => {
+          let [resource, config] = args;
+          // console.log(args,'args');
+          if (resource.includes("https://www.google-analytics.com/g/collect")) {
+            for (let key in userProperties) {
+              if (!resource.includes(`up.${key}=${userProperties[key]}`)) {
+                resource = resource + `&up.${key}=${userProperties[key]}`;
+              }
+            }
+          }
+          // 发送请求
+          return await originalFetch(resource, config);
+        };
+      })();
+    </script>
+    <script>
+      //Detail_pv_user
+      (function () {
+        const { pathname } = window.location;
+        const hi_source = getValueByURLOrCookie("hi_source");
+        const { hi_source_clid } = getInfoBySource(hi_source);
+        if (pathname.includes("/detail")) {
+          window.setCookieTomorrow("detail_time", new Date().getTime());
+          const detailPvUser = window.getCookie("detailPvUser");
+          if (detailPvUser) {
+            let buffer = {};
+            try {
+              buffer = JSON.parse(detailPvUser);
+              if (!buffer[hi_source_clid]) {
+                buffer[hi_source_clid] = {
+                  isPush: true,
+                  time: new Date().getTime()
+                };
+                //两次clid无点击逻辑按子渠道存
+                if (!buffer[getHostname() + "_isPushGtm"]) {
+                  if (buffer[getHostname() + "_first"]) {
+                    if (
+                      !buffer[getHostname() + "_second"] &&
+                      buffer[getHostname() + "_first"] !== hi_source_clid
+                    ) {
+                      buffer[getHostname() + "_second"] = hi_source_clid;
+                    }
+                  } else {
+                    buffer[getHostname() + "_first"] = hi_source_clid;
+                  }
+                }
+                pushEventToGTM("Detail_pv_user");
+                setCookieTomorrow("detailPvUser", JSON.stringify(buffer));
+              }
+            } catch (e) {}
+          } else {
+            let buffer = {};
+            buffer[hi_source_clid] = {
+              isPush: true,
+              time: new Date().getTime()
+            };
+            buffer[getHostname() + "_first"] = hi_source_clid;
+            pushEventToGTM("Detail_pv_user");
+            setCookieTomorrow("detailPvUser", JSON.stringify(buffer));
+          }
+        }
+      })();
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-WVMPWZRF");
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      (function (g, o) {
+        (g[o] =
+          g[o] ||
+          function () {
+            (g[o]["q"] = g[o]["q"] || []).push(arguments);
+          }),
+          (g[o]["t"] = 1 * new Date());
+      })(window, "_googCsa");
+    </script>
+
+    <script>
+      window.addEventListener("load", function () {
+        if ("serviceWorker" in window.navigator) {
+          window.navigator.serviceWorker
+            .register("/sw.js")
+            .then(() => {})
+            .catch(() => {});
+        }
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          window.deferredPrompt = e;
+        });
+      });
+    </script>
+  </head>
+  <body {{ BODY_ATTRS }} tabindex="0">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WVMPWZRF"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    {{ APP }}
+    <script>
+      window.isUnloaded = false;
+      window.done = false;
+      window.done1 = false;
+
+      window.addEventListener("beforeunload", () => {
+        if (!window.done) {
+          // 处理 AFS 广告埋点逻辑
+          const activeElement = document.activeElement;
+          const src = activeElement?.getAttribute("src") || "";
+          let eventName = "";
+
+          if (src.includes("afs/ads?")) {
+            if (activeElement.getAttribute("title")) {
+              window.trackEventToPixel("T_AR");
+              // window.pushEventParamsToGtm("T_AR");
+              const searchParams = new URLSearchParams(window.location.search);
+              const ttclid = searchParams.get("ttclid");
+              pushEventToGTM("T_AR", {
+                hi_country: window.youknowwho_ip_country || "unknown",
+                hi_ip: window.youknowwho_ip || "unknown",
+                hi_ttclid: ttclid || window.getCookie("hi_ttclid") || "unknown"
+              });
+              handleDataMonitor();
+            } else {
+              window.pushEventParamsToGtm("T_AC");
+              TACChangeCookie();
+              if (window.location.pathname.startsWith("/detail")) {
+                window.setCookie("click_ad", 1);
+              }
+            }
+          } else if (src.includes("afs/ads/i/")) {
+            eventName = "T_AG";
+          }
+
+          if (eventName) {
+            dataLayer.push({ event: eventName });
+            window.done = true;
+          }
+        }
+      });
+
+      // 监听失去焦点事件
+      window.addEventListener("blur", () => {
+        const activeElement = document.activeElement;
+        const sourceAttribute = activeElement.getAttribute("src");
+
+        // afs埋点
+        if (sourceAttribute && sourceAttribute.includes("afs/ads?")) {
+          if (activeElement.getAttribute("title")) {
+            dataLayer.push({ event: "D_AR" });
+          } else {
+            dataLayer.push({ event: "D_AC" });
+          }
+        }
+      });
+
+      window.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          setTimeout(() => {
+            window.done = false;
+            window.done1 = false;
+            document.body.focus();
+          }, 0);
+        }
+      });
+
+      function HandleMessageTACANDTAR(e) {
+        if (window.done1) {
+          return;
+        }
+        const activeElement = document.activeElement;
+        const src = activeElement?.getAttribute("src") || "";
+        if (src.includes("afs/ads?")) {
+          if (activeElement.getAttribute("title")) {
+            dataLayer.push({
+              event: "T_AR_NEW"
+            });
+            window.done1 = true;
+          } else {
+            window.trackEventToPixel("T_AC_MSG");
+            dataLayer.push({ event: "T_AC_MSG", hi_time: handleTACMSGToLoad() });
+            window.done1 = true;
+          }
+        }
+      }
+      //TAC和TAR埋点监听消息
+      window.addEventListener("message", (e) => {
+        if (typeof e?.data === "string" && e?.data?.startsWith("FSXDC,.aCS:")) {
+          HandleMessageTACANDTAR();
+        }
+      });
+    </script>
+  </body>
+</html>
