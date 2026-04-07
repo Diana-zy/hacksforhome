@@ -2,10 +2,10 @@
   <footer class="footer" :class="{ sm: ['de'].indexOf(lang) !== -1 }">
     <div class="footer-info">
       <div class="icon-logo">
-        <img :src="icon" alt="Searchofeeds" />
+        <img :src="icon" alt="Hacksforhome" />
       </div>
       <div class="website-info">
-        <div>Searchofeeds is your trusted source for the latest global news and information across politics, economy, technology, culture, sports, and more.</div>
+        <div>Hacksforhome is your trusted source for the latest global news and information across politics, economy, technology, culture, sports, and more.</div>
         <div>We are committed to delivering comprehensive, accurate, and timely coverage of world events to keep you informed and engaged.</div>
       </div>
       <div class="link-info">
@@ -17,11 +17,11 @@
             <CustomLink :to="'/eula.html'" target="_blank">Terms of Service</CustomLink>
           </li>
           <li class="link-item">
-            <a href="mailto:service@searchofeeds.com">Contact</a>
+            <a href="mailto:service@hacksforhome.com">Contact</a>
           </li>
         </ul>
       </div>
-      <div class="bottom-info">Copyright &copy; 2024 Searchofeeds &nbsp; All rights reserved</div>
+      <div class="bottom-info">Copyright &copy; 2024 Hacksforhome &nbsp; All rights reserved</div>
     </div>
     <Notification v-if="showNotification" :message="notificationMessage" />
   </footer>

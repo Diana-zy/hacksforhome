@@ -171,7 +171,7 @@ export default {
       const articleFaqs = data.faqs || [
         {
           question: "Want to learn more about this topic?",
-          answer: "Searchofeeds covers the latest news and information across politics, economy, technology, culture, sports, and more."
+          answer: "Hacksforhome covers the latest news and information across politics, economy, technology, culture, sports, and more."
         },
         {
           question: "Where can I find more related articles?",
@@ -213,7 +213,7 @@ export default {
       htmlAttrs: {
         lang: this.newInfo && this.newInfo.language
       },
-      title: this.newInfo && this.newInfo.name ? this.newInfo.name + " - Searchofeeds" : "Searchofeeds",
+      title: this.newInfo && this.newInfo.name ? this.newInfo.name + " - Hacksforhome" : "Hacksforhome",
       meta: [
         {
           hid: "description",
@@ -238,7 +238,7 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+          content: `https://hacksforhome.com/${this.newInfo && this.newInfo.path_v2}/`
         },
         {
           hid: "og:locale",
@@ -259,7 +259,7 @@ export default {
       link: [
         {
           rel: "canonical",
-          href: `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+          href: `https://hacksforhome.com/${this.newInfo && this.newInfo.path_v2}/`
         }
       ],
       script: [
@@ -287,15 +287,15 @@ export default {
             ],
             "publisher": {
               "@type": "Organization",
-              "name": "Searchofeeds",
+              "name": "Hacksforhome",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.searchofeeds.com/logo.png"
+                "url": "https://www.hacksforhome.com/logo.png"
               }
             },
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": `https://searchofeeds.com/${this.newInfo && this.newInfo.path_v2}/`
+              "@id": `https://hacksforhome.com/${this.newInfo && this.newInfo.path_v2}/`
             }
           }
         }

@@ -22,9 +22,9 @@ export default {
           json: {
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "Searchofeeds",
-            url: "https://www.searchofeeds.com/",
-            logo: "https://bunchthings.com/site-logo/searchofeeds/searchofeeds-logo-144.png",
+            name: "Hacksforhome",
+            url: "https://www.hacksforhome.com/",
+            logo: "https://bunchthings.com/site-logo/hacksforhome/hacksforhome-logo-144.png",
             sameAs: this.$sameAs || [],
             ContactPoint: [],
             parentOrganization: {}
@@ -35,11 +35,11 @@ export default {
           json: {
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "Searchofeeds",
-            url: "https://www.searchofeeds.com/",
+            name: "Hacksforhome",
+            url: "https://www.hacksforhome.com/",
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://www.searchofeeds.com/search/?query={search_term_string}",
+              target: "https://www.hacksforhome.com/search/?query={search_term_string}",
               "query-input": "required name=search_term_string"
             }
           }
@@ -49,7 +49,7 @@ export default {
         {
           rel: "canonical",
           hid: "canonical",
-          href: `https://www.searchofeeds.com${this.$nuxt.context.route.path}`
+          href: `https://www.hacksforhome.com${this.$nuxt.context.route.path}`
         }
       ]
     };

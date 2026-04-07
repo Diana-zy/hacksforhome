@@ -96,12 +96,12 @@ export default {
   head() {
     const categoryName = (this.categoryInfo && this.categoryInfo.seo_category && this.categoryInfo.seo_category.name) || "";
     return {
-      title: `${categoryName} - Searchofeeds`,
+      title: `${categoryName} - Hacksforhome`,
       meta: [
         {
           hid: "description",
           name: "description",
-          content: `Browse the latest ${categoryName} articles on Searchofeeds.`
+          content: `Browse the latest ${categoryName} articles on Hacksforhome.`
         }
       ],
       script: [
@@ -115,7 +115,7 @@ export default {
                 "@type": "ListItem",
                 position: 1,
                 item: {
-                  "@id": "https://www.searchofeeds.com/",
+                  "@id": "https://www.hacksforhome.com/",
                   name: "Home"
                 }
               },
@@ -123,7 +123,7 @@ export default {
                 "@type": "ListItem",
                 position: 2,
                 item: {
-                  "@id": `https://www.searchofeeds.com/category/${this.id}/`,
+                  "@id": `https://www.hacksforhome.com/category/${this.id}/`,
                   name: categoryName
                 }
               }
