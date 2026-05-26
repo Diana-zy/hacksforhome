@@ -29,7 +29,7 @@ export default {
         const ins = document.createElement("ins");
         ins.className = "adsbygoogle";
         ins.style.display = "block";
-        ins.setAttribute("data-ad-client", "ca-pub-1853000876464912");
+        ins.setAttribute("data-ad-client", "ca-pub-6612490456597819");
         ins.setAttribute("data-ad-slot", this.adSlot);
         ins.setAttribute("data-ad-format", "rectangle");
         ins.setAttribute("data-full-width-responsive", "true");

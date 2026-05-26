@@ -4,7 +4,7 @@
     <ins
       class="adsbygoogle"
       style="display: block"
-      data-ad-client="ca-pub-1853000876464912"
+      data-ad-client="ca-pub-6612490456597819"
       data-ad-format="rectangle"
       data-full-width-responsive="true"
       :data-ad-slot="adSlot"
