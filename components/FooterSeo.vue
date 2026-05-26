@@ -74,7 +74,7 @@ export default {
       }
     },
     handleClick(type) {
-      if (window.location.pathname.match(/\/[^\/]+\/[^\/]+-\d+\//)) {
+      if (window.location.pathname.match(/\/[^/]+\/[^/]+-\d+\//)) {
         let url;
         switch (type) {
           case "facebook":

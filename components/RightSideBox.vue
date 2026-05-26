@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import { capitalizeFirstLetter } from "~/utils/utils";
 import CustomLink from "./CustomLink";
+import { capitalizeFirstLetter } from "~/utils/utils";
 export default {
   name: "RightSideBox",
   components: { CustomLink },

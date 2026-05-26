@@ -84,9 +84,9 @@ export default {
         }
       });
       window.addEventListener("beforeunload", () => {
-        const hi_user_source =
+        const hiUserSource =
           window.getValueByURLOrCookie && window.getValueByURLOrCookie("hi_source");
-        if (hi_user_source === "unknown") {
+        if (hiUserSource === "unknown") {
           this.handleFormatSEO(this.maxScrollPercentage);
         }
         if (window.dataLayer) {
