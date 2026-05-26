@@ -14,20 +14,17 @@ export default {
     concurrency: 10,
     interval: 100,
     async routes() {
-      const pathData = await fetch(
-        `${process.env.PROD_API_URL}/api/article/get_all_path?site_id=${process.env.SITE_ID}`
-      );
-      const path = await pathData.json();
-      const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
-      const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
-
       const pathV2Data = await fetch(
         `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
       );
       const pathV2 = await pathV2Data.json();
-      const slugPaths = (pathV2.data.detail || []).map((item) => `/${item}/`);
-
-      return [...categoryPaths, ...detailPaths, ...slugPaths];
+      const categoryPaths = (pathV2.data.seo_category || [])
+        .filter((item) => item && String(item).trim())
+        .map((item) => `/category/${item}/`);
+      const detailPaths = (pathV2.data.detail || [])
+        .filter((item) => item && String(item).trim())
+        .map((item) => `/${item}/`);
+      return [...categoryPaths, ...detailPaths];
     }
   },
   axios: {
@@ -35,7 +32,14 @@ export default {
       process.env.NODE_ENV === "production" ? process.env.PROD_API_URL : process.env.TEST_API_URL
   },
   router: {
-    trailingSlash: true
+    trailingSlash: true,
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: "category-detail",
+        path: "/:category/:detail",
+        component: resolve(__dirname, "pages/_category/_slug.vue")
+      });
+    }
   },
   head: {
     title: "Hacksforhome - Global News at Your Fingertips!",
@@ -90,14 +94,39 @@ export default {
     "~/plugins/nav-data"
   ],
   components: true,
-  buildModules: ["@nuxtjs/style-resources", "@nuxt/image", "@nuxtjs/pwa", "@nuxtjs/sitemap"],
+  buildModules: ["@nuxtjs/style-resources", "@nuxt/image", "@nuxtjs/pwa"],
   css: ["@/assets/css/fonts.css", "@/assets/css/reset.css", "@/assets/css/common.scss"],
   styleResources: {
     scss: ["~/assets/css/_mixins.scss"]
   },
   modules: ["@nuxtjs/axios"],
-  sitemap: {
-    hostname: "https://hacksforhome.com/"
+  hooks: {
+    "generate:done"(generator) {
+      const nodePath = require("path");
+      const fs = require("fs");
+      const hostname = "https://hacksforhome.com";
+      const today = new Date().toISOString().split("T")[0];
+
+      const routes = [...generator.generatedRoutes].filter(
+        (r) => r && typeof r === "string" && !r.includes(":")
+      );
+
+      const urlEntries = routes
+        .map(
+          (r) =>
+            `  <url>\n    <loc>${hostname}${r}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>`
+        )
+        .join("\n");
+
+      const xml =
+        `<?xml version="1.0" encoding="UTF-8"?>\n` +
+        `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+        urlEntries +
+        `\n</urlset>`;
+
+      const outputPath = nodePath.join(generator.options.generate.dir, "sitemap.xml");
+      fs.writeFileSync(outputPath, xml, "utf8");
+    }
   },
   pwa: {
     manifest: {
