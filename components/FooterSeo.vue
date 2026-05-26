@@ -21,6 +21,17 @@
           </li>
         </ul>
       </div>
+      <div class="link-info link-info-social">
+        <div class="m-hidden-block">Follow us:</div>
+        <ul>
+          <li class="link-item">
+            <span @click="handleClick('twitter')">X (Twitter)</span>
+          </li>
+          <li class="link-item">
+            <span @click="handleClick('facebook')">Facebook</span>
+          </li>
+        </ul>
+      </div>
       <div class="bottom-info">Copyright &copy; 2026 Hacksforhome &nbsp; All rights reserved</div>
     </div>
     <Notification v-if="showNotification" :message="notificationMessage" />
@@ -32,18 +43,9 @@ import { validateEmail } from "~/utils/utils";
 
 export default {
   props: {
-    lang: {
-      type: String,
-      default: "en"
-    },
-    channelId: {
-      type: String,
-      default: ""
-    },
-    info: {
-      type: Object,
-      default: () => ({})
-    }
+    lang: { type: String, default: "en" },
+    channelId: { type: String, default: "" },
+    info: { type: Object, default: () => ({}) }
   },
   data() {
     return {
@@ -66,15 +68,36 @@ export default {
           site_id: process.env.SITE_ID,
           email: this.input
         });
-        this.$globalMethod.showNotification({
-          message: "Thank you for subscribing!",
-          type: "success"
-        });
+        this.$globalMethod.showNotification({ message: "Thank you for subscribing!", type: "success" });
       } else {
-        this.$globalMethod.showNotification({
-          message: "Please enter a valid email address",
-          type: "warning"
-        });
+        this.$globalMethod.showNotification({ message: "Please enter a valid email address", type: "warning" });
+      }
+    },
+    handleClick(type) {
+      if (window.location.pathname.match(/\/[^\/]+\/[^\/]+-\d+\//)) {
+        let url;
+        switch (type) {
+          case "facebook":
+            url = `https://www.facebook.com/sharer/sharer.php?u=${window.location.origin + window.location.pathname}&picture=https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.info.cover}&v=3`;
+            window.open(url);
+            break;
+          case "twitter":
+            url = `https://twitter.com/intent/tweet?url=${window.location.origin + window.location.pathname}&text=${this.info.name}`;
+            window.open(url);
+            break;
+        }
+      } else {
+        let url;
+        switch (type) {
+          case "facebook":
+            url = "https://www.facebook.com/hacksforhome";
+            window.open(url, "_blank");
+            break;
+          case "twitter":
+            url = "https://x.com/hacksforhome";
+            window.open(url, "_blank");
+            break;
+        }
       }
     }
   }
@@ -117,6 +140,14 @@ export default {
     }
     a {
       color: rgba(#000, 0.65);
+    }
+  }
+  .link-info-social {
+    margin-top: 4px;
+    span {
+      cursor: pointer;
+      color: rgba(#000, 0.65);
+      &:hover { text-decoration: underline; }
     }
   }
   .bottom-info {
@@ -171,6 +202,9 @@ export default {
         color: rgba(#000, 0.65);
         border-bottom: vw(1) solid rgba($font3, 0.35);
       }
+    }
+    .link-info-social {
+      padding-top: 0;
     }
     .bottom-info {
       transform: none;

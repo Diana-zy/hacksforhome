@@ -6,12 +6,12 @@
         <breadcrumb
           :info="{
             category_id: id,
-            category_locale_name: categoryInfo && categoryInfo.seo_category && categoryInfo.seo_category.name
+            category_locale_name: categoryInfo?.seo_category?.name
           }"
           isCategory
         ></breadcrumb>
         <common-page-label
-          :title="`${capitalizeFirstLetter(categoryInfo && categoryInfo.seo_category && categoryInfo.seo_category.name)} - Articles`"
+          :title="`${capitalizeFirstLetter(categoryInfo?.seo_category?.name)} Articles`"
         />
         <section>
           <InfiniteLoadList
@@ -22,7 +22,7 @@
             :query="{
               seo_category_id: id
             }"
-            :initial-items="categoryInfo && categoryInfo.list"
+            :initial-items="categoryInfo?.list"
             class="news-box-4"
           >
             <template #default="{ items }">
@@ -37,7 +37,7 @@
         </section>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews && trendingNews.list || []" :trending-news="recNews && recNews.list || []" />
+        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
     <FooterSeo />
@@ -56,25 +56,13 @@ export default {
     try {
       const [recNewsResponse, trendingNewsResponse, categoryInfoResponse] = await Promise.all([
         $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "rec"
-          }
+          params: { site_id: env.SITE_ID, mod_id: "rec" }
         }),
         $axios.$get("/api/article/get_all_articles", {
-          params: {
-            site_id: env.SITE_ID,
-            size: 4,
-            page: 1
-          }
+          params: { site_id: env.SITE_ID, size: 4, page: 1 }
         }),
         $axios.$get("/api/article/get_seo_category_page", {
-          params: {
-            site_id: env.SITE_ID,
-            seo_category_id: id,
-            size: 10,
-            page: 1
-          }
+          params: { site_id: env.SITE_ID, seo_category_id: id, size: 10, page: 1 }
         })
       ]);
       return {
@@ -85,24 +73,36 @@ export default {
       };
     } catch (error) {
       console.error("Error fetching data:", error);
-      return {
-        recNews: null,
-        trendingNews: null,
-        categoryInfo: null,
-        id
-      };
+      return { recNews: null, trendingNews: null, categoryInfo: null, id };
     }
   },
   head() {
-    const categoryName = (this.categoryInfo && this.categoryInfo.seo_category && this.categoryInfo.seo_category.name) || "";
+    const category = this.categoryInfo?.seo_category;
+    const categoryName = category?.name || "";
+    const seoTitle = category?.seo_title || `${categoryName} Articles | Hacksforhome`;
+    const seoDesc =
+      category?.seo_desc ||
+      `Browse the latest ${categoryName} articles on Hacksforhome. Stay informed with comprehensive global news coverage.`;
+
+    const itemListElements =
+      this.categoryInfo?.list?.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `https://www.hacksforhome.com/${item.path_v2}/`
+      })) || [];
+
     return {
-      title: `${categoryName} - Hacksforhome`,
+      title: seoTitle,
       meta: [
+        { hid: "description", name: "description", content: seoDesc },
+        { hid: "og:title", property: "og:title", content: seoTitle },
+        { hid: "og:description", property: "og:description", content: seoDesc },
         {
-          hid: "description",
-          name: "description",
-          content: `Browse the latest ${categoryName} articles on Hacksforhome.`
-        }
+          hid: "og:url",
+          property: "og:url",
+          content: `https://www.hacksforhome.com/category/${this.id}/`
+        },
+        { hid: "og:type", property: "og:type", content: "website" }
       ],
       script: [
         {
@@ -114,10 +114,7 @@ export default {
               {
                 "@type": "ListItem",
                 position: 1,
-                item: {
-                  "@id": "https://www.hacksforhome.com/",
-                  name: "Home"
-                }
+                item: { "@id": "https://www.hacksforhome.com/", name: "Home" }
               },
               {
                 "@type": "ListItem",
@@ -129,13 +126,19 @@ export default {
               }
             ]
           }
+        },
+        {
+          type: "application/ld+json",
+          json: {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: itemListElements
+          }
         }
       ]
     };
   },
-  methods: {
-    capitalizeFirstLetter
-  }
+  methods: { capitalizeFirstLetter }
 };
 </script>
 
@@ -145,6 +148,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px 28px;
+    font-family: "Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
   }
 }
 @media screen and (max-width: 750px) {

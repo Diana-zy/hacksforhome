@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews && trendingNews.list || []" :trending-news="recNews && recNews.list || []" />
+        <right-side-box :rec-news="(trendingNews && trendingNews.list) || []" :trending-news="(recNews && recNews.list) || []" />
       </div>
     </main>
     <FooterSeo />
@@ -53,55 +53,35 @@ export default {
   },
   async asyncData({ $axios, env }) {
     try {
-      const [recNewsResponse, trendingNewsResponse, categoryResponse] =
-        await Promise.all([
-          $axios.$get("/api/article/menu", {
-            params: {
-              site_id: env.SITE_ID,
-              mod_id: "rec"
-            }
-          }),
-          $axios.$get("/api/article/get_all_articles", {
-            params: {
-              site_id: env.SITE_ID,
-              size: 4,
-              page: 1
-            }
-          }),
-          $axios.$get("/api/article/get_all_seo_category", {
-            params: {
-              site_id: env.SITE_ID
-            }
-          }).catch(() => null)
-        ]);
-      let category = [];
-      if (categoryResponse && categoryResponse.list) {
-        categoryResponse.list.map((item) => {
-          category.push(
-            $axios.$get("/api/article/get_seo_category_page", {
-              params: {
-                site_id: env.SITE_ID,
-                seo_category_id: item.id,
-                size: 4,
-                page: 1
-              }
-            })
-          );
-        });
-      }
-      let list = await Promise.all(category);
+      const [recNewsResponse, trendingNewsResponse, categoryResponse] = await Promise.all([
+        $axios.$get("/api/article/menu", {
+          params: { site_id: env.SITE_ID, mod_id: "rec" }
+        }),
+        $axios.$get("/api/article/get_all_articles", {
+          params: { site_id: env.SITE_ID, size: 4, page: 1 }
+        }),
+        $axios.$get("/api/article/get_all_seo_category", {
+          params: { site_id: env.SITE_ID }
+        }).catch(() => null)
+      ]);
+
+      const categoryItems = (categoryResponse && categoryResponse.list) || [];
+      const list = await Promise.all(
+        categoryItems.map((item) =>
+          $axios.$get("/api/article/get_seo_category_page", {
+            params: { site_id: env.SITE_ID, seo_category_id: item.id, size: 4, page: 1 }
+          })
+        )
+      );
+
       return {
         recNews: recNewsResponse,
         trendingNews: trendingNewsResponse,
-        categoryList: list && list.filter((item) => item != null)
+        categoryList: list.filter((item) => item != null)
       };
     } catch (error) {
       console.error("Error fetching data:", error);
-      return {
-        recNews: null,
-        trendingNews: null,
-        categoryList: []
-      };
+      return { recNews: null, trendingNews: null, categoryList: [] };
     }
   },
   data() {
