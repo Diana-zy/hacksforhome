@@ -168,7 +168,7 @@ export default {
       const adblock1 = {
         container: "afscontainer1",
         number: 8,
-        clicktrackUrl: `https://api.tapmygame.com/api/ct/afsct?cid=${channelId}&hi_source=${hiSource}&scid=${scid}&cc=${window.youknowwho_ip_country || "unknown"}&site_id=searchofeeds`,
+        clicktrackUrl: `https://api.tapmygame.com/api/ct/afsct?cid=${channelId}&hi_source=${hiSource}&scid=${scid}&cc=${window.youknowwho_ip_country || "unknown"}&site_id=hacksforhome`,
         adLoadedCallback: (loaded, e) => {
           if (e) {
             window.trackEventToPixel && window.trackEventToPixel("C_AR");
