@@ -309,11 +309,6 @@ export default {
       this.channelId = searchParams.get("channel");
     } else {
       this.channelId = (this.newInfo && this.newInfo.channel) || "";
-      if (this.channelId !== "") {
-        searchParams.set("channel", this.channelId);
-        const newUrl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
-        window.history.replaceState({}, "", newUrl);
-      }
     }
     setTimeout(() => {
       this.newInfo && this.newInfo.no_entry !== 1 && this.addAdSenseScript();
