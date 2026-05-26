@@ -20,13 +20,13 @@
           >
             {{ cookiesText[lang] || cookiesText["en"] }}
           </CustomLink>
-          <a href="mailto:service@searchofeeds.com">
+          <a href="mailto:service@hacksforhome.com">
             {{ contactText[lang] || contactText["en"] }}
           </a>
         </div>
         <span>
           {{ copyRightText1[lang] || copyRightText1["en"] }}
-          ©&nbsp; 2024 Searchofeeds &nbsp;
+          &copy;&nbsp; 2026 Hacksforhome &nbsp;
           {{ copyRightText2[lang] || copyRightText2["en"] }}
         </span>
       </div>
@@ -54,11 +54,11 @@ export default {
         ko: "서비스 약관",
         zh_TW: "服務條款",
         de: "Nutzungsbedingungen",
-        pt: "Termos de Serviço", // 葡萄牙语
-        es: "Términos de Servicio", // 西班牙语
-        fr: "Conditions d'utilisation", // 法语
-        th: "ข้อกำหนดการให้บริการ", // 泰语
-        id: "Ketentuan Layanan" // 印度尼西亚语
+        pt: "Termos de Serviço",
+        es: "Términos de Servicio",
+        fr: "Conditions d'utilisation",
+        th: "ข้อกำหนดการให้บริการ",
+        id: "Ketentuan Layanan"
       },
       privacyText: {
         en: "Privacy Policy",
@@ -66,11 +66,11 @@ export default {
         ko: "개인 정보 정책",
         zh_TW: "隱私政策",
         de: "Datenschutzrichtlinie",
-        pt: "Política de Privacidade", // 葡萄牙语
-        es: "Política de Privacidad", // 西班牙语
-        fr: "Politique de Confidentialité", // 法语
-        th: "นโยบายความเป็นส่วนตัว", // 泰语
-        id: "Kebijakan Privasi" // 印度尼西亚语
+        pt: "Política de Privacidade",
+        es: "Política de Privacidad",
+        fr: "Politique de Confidentialité",
+        th: "นโยบายความเป็นส่วนตัว",
+        id: "Kebijakan Privasi"
       },
       cookiesText: {
         en: "Cookies Policy",
@@ -78,11 +78,11 @@ export default {
         ko: "쿠키 정책",
         zh_TW: "Cookie 政策",
         de: "Cookie-Richtlinie",
-        pt: "Política de Cookies", // 葡萄牙语
-        es: "Política de Cookies", // 西班牙语
-        fr: "Politique de Cookies", // 法语
-        th: "นโยบายคุกกี้", // 泰语
-        id: "Kebijakan Cookie" // 印度尼西亚语
+        pt: "Política de Cookies",
+        es: "Política de Cookies",
+        fr: "Politique de Cookies",
+        th: "นโยบายคุกกี้",
+        id: "Kebijakan Cookie"
       },
       contactText: {
         en: "Contact",
@@ -90,11 +90,11 @@ export default {
         ko: "연락하다",
         zh_TW: "聯絡",
         de: "Kontakt",
-        pt: "Contato", // 葡萄牙语
-        es: "Contacto", // 西班牙语
-        fr: "Contact", // 法语
-        th: "ติดต่อ", // 泰语
-        id: "Kontak" // 印度尼西亚语
+        pt: "Contato",
+        es: "Contacto",
+        fr: "Contact",
+        th: "ติดต่อ",
+        id: "Kontak"
       },
       copyRightText1: {
         en: "Copyright",
@@ -102,11 +102,11 @@ export default {
         ko: "모든 권리 보유",
         zh_TW: "Copyright",
         de: "Urheberrecht",
-        pt: "Direitos Autorais", // 葡萄牙语
-        es: "Derechos de Autor", // 西班牙语
-        fr: "Droits d'Auteur", // 法语
-        th: "ลิขสิทธิ์", // 泰语
-        id: "Hak Cipta" // 印度尼西亚语
+        pt: "Direitos Autorais",
+        es: "Derechos de Autor",
+        fr: "Droits d'Auteur",
+        th: "ลิขสิทธิ์",
+        id: "Hak Cipta"
       },
       copyRightText2: {
         en: "All rights reserved",
@@ -114,11 +114,11 @@ export default {
         ko: "저작권",
         zh_TW: "All rights reserved",
         de: "Alle Rechte vorbehalten",
-        pt: "Todos os direitos reservados", // 葡萄牙语
-        es: "Todos los derechos reservados", // 西班牙语
-        fr: "Tous droits réservés", // 法语
-        th: "สงวนลิขสิทธิ์", // 泰语
-        id: "Semua hak dilindungi" // 印度尼西亚语
+        pt: "Todos os direitos reservados",
+        es: "Todos los derechos reservados",
+        fr: "Tous droits réservés",
+        th: "สงวนลิขสิทธิ์",
+        id: "Semua hak dilindungi"
       }
     };
   },

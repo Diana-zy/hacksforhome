@@ -38,7 +38,7 @@ export default {
     trailingSlash: true
   },
   head: {
-    title: "Searchofeeds - Global News at Your Fingertips!",
+    title: "Hacksforhome - Global News at Your Fingertips!",
     meta: [
       {
         name: "version",
@@ -72,7 +72,7 @@ export default {
       {
         hid: "og:site_name",
         property: "og:site_name",
-        content: "Searchofeeds"
+        content: "Hacksforhome"
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
@@ -97,18 +97,18 @@ export default {
   },
   modules: ["@nuxtjs/axios"],
   sitemap: {
-    hostname: "https://searchofeeds.com/"
+    hostname: "https://hacksforhome.com/"
   },
   pwa: {
     manifest: {
-      name: "Searchofeeds",
-      short_name: "Searchofeeds",
+      name: "Hacksforhome",
+      short_name: "Hacksforhome",
       description:
         "We are committed to delivering you the latest developments in various fields, including politics, economy, technology, culture, sports, and more.!"
     },
     icon: {
       src: "static/icon.png",
-      sizes: [32, 64, 120, 144, 152, 192, 512] // 自定义生成的图标尺寸
+      sizes: [32, 64, 120, 144, 152, 192, 512]
     }
   },
   build: {

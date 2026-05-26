@@ -1,8 +1,8 @@
-# Searchofeeds - LLM Crawler Guide
+# Hacksforhome - LLM Crawler Guide
 
 ## Site Overview
 
-Searchofeeds is a global news aggregation platform delivering the latest developments across multiple topics:
+Hacksforhome is a global news aggregation platform delivering the latest developments across multiple topics:
 
 - Politics: International and domestic political news
 - Economy: Financial markets, business, and economic trends
@@ -55,7 +55,7 @@ Each article includes:
 
 ## Contact
 
-Website: https://www.searchofeeds.com
+Website: https://www.hacksforhome.com
 
 ---
 
