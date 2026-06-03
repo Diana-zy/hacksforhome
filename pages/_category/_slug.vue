@@ -310,9 +310,9 @@ export default {
     } else {
       this.channelId = (this.newInfo && this.newInfo.channel) || "";
     }
-    setTimeout(() => {
+    this.$nextTick(() => {
       this.newInfo && this.newInfo.no_entry !== 1 && this.addAdSenseScript();
-    }, 0);
+    });
   },
   methods: {
     scrollToAnchor(id) {
@@ -336,11 +336,10 @@ export default {
       }
       const ignoredPageParams = paramKeys.join(",");
 
-      const channelId = window.getParam && window.getParam("channel");
       const hiSource = window.getParam && window.getParam("hi_source");
       const hiPc = window.getParam && window.getParam("hi_pc");
       const resultsPageBaseUrl = window.getResultsPageUrl && window.getResultsPageUrl({
-        channel: channelId,
+        channel: this.channelId,
         from: "detail",
         hi_source: hiSource,
         hi_pc: hiPc

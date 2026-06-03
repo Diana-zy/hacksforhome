@@ -13,6 +13,7 @@
         <common-page-label
           :title="`${capitalizeFirstLetter(categoryInfo?.seo_category?.name)} Articles`"
         />
+        <div id="relatedsearches1"></div>
         <section>
           <InfiniteLoadList
             api-endpoint="/api/article/get_seo_category_page"
@@ -138,7 +139,98 @@ export default {
       ]
     };
   },
-  methods: { capitalizeFirstLetter }
+  data() {
+    return {
+      channelId: ""
+    };
+  },
+  mounted() {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("channel")) {
+      this.channelId = searchParams.get("channel");
+    } else {
+      this.channelId = this.categoryInfo?.seo_category?.channel || "";
+    }
+    this.$nextTick(() => {
+      this.addAdSenseScript();
+    });
+  },
+  methods: {
+    capitalizeFirstLetter,
+    addAdSenseScript() {
+      const searchParams = new URLSearchParams(window.location.search);
+      let terms = searchParams.has("terms") ? searchParams.get("terms") : "";
+      terms = terms.replace(/[，]/g, ",");
+      let headline = searchParams.has("headline") ? searchParams.get("headline") : "";
+      if (headline === "{title}" || headline === "{{ad_title}}") {
+        headline = "";
+      }
+
+      const paramKeys = [];
+      for (const param of searchParams) {
+        paramKeys.push(param[0]);
+      }
+      const ignoredPageParams = paramKeys.join(",");
+
+      const hiSource = window.getParam && window.getParam("hi_source");
+      const hiPc = window.getParam && window.getParam("hi_pc");
+      const resultsPageBaseUrl = window.getResultsPageUrl && window.getResultsPageUrl({
+        channel: this.channelId,
+        from: "detail",
+        hi_source: hiSource,
+        hi_pc: hiPc
+      });
+      const adSenseConfig = {
+        channel: this.channelId,
+        pubId: "partner-pub-6612490456597819",
+        styleId: "6462282781",
+        adsafe: "low",
+        ignoredPageParams,
+        relatedSearchTargeting: "content",
+        resultsPageBaseUrl,
+        resultsPageQueryParam: "query",
+        terms: terms,
+        referrerAdCreative: headline || terms,
+        ivt: false,
+        adtest: "off"
+      };
+
+      // eslint-disable-next-line no-undef
+      _googCsa("relatedsearch", adSenseConfig, {
+        container: "relatedsearches1",
+        relatedSearches: 10,
+        adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
+          if (response) {
+            window.trackEventToPixel && window.trackEventToPixel("D_C_AC");
+            window.pushEventParamsToGtm && window.pushEventParamsToGtm("C_AC");
+            window.setCookie && window.setCookie("query_ad", 1);
+            try {
+              let numberOfKeys = 0;
+              let concatenatedKeys = "miss";
+              if (callbackOptions.termPositions) {
+                const keys = Object.keys(callbackOptions.termPositions);
+                numberOfKeys = keys.length;
+                concatenatedKeys = keys.join(",");
+              }
+              const element = document.getElementById("master-1");
+              const height = parseFloat(element.style.height);
+              const result = Math.round(height / 105);
+              // eslint-disable-next-line no-undef
+              dataLayer.push({
+                event: "C_AC_IN",
+                queryNum: 10,
+                num: result,
+                key1: numberOfKeys,
+                key2: concatenatedKeys
+              });
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        }
+      });
+    }
+  }
 };
 </script>
 
