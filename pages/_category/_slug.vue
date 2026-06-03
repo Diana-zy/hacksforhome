@@ -304,6 +304,7 @@ export default {
   },
   mounted() {
     window.setCookie && window.setCookie("mounted", 1);
+    window._isArticleDetail = true;
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has("channel")) {
       this.channelId = searchParams.get("channel");
@@ -347,7 +348,7 @@ export default {
       const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-6612490456597819",
-        styleId: "6462282781",
+        styleId: "7767580164",
         adsafe: "low",
         ignoredPageParams,
         relatedSearchTargeting: "content",

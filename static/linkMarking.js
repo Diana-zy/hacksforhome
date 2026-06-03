@@ -41,7 +41,7 @@ window.addEventListener("blur", () => {
   const activeElement = document.activeElement;
   const src = activeElement.getAttribute("src");
   if (src && src.includes("afs/ads?")) {
-    if (!activeElement.getAttribute("title") && location.pathname.includes("/detail/")) {
+    if (!activeElement.getAttribute("title") && (location.pathname.includes("/detail/") || window._isArticleDetail)) {
       const cipherText = btoa(
         JSON.stringify({
           timestamp: Date.now()

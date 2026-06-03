@@ -183,7 +183,7 @@ export default {
       const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-6612490456597819",
-        styleId: "6462282781",
+        styleId: "7767580164",
         adsafe: "low",
         ignoredPageParams,
         relatedSearchTargeting: "content",

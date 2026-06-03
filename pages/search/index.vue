@@ -149,7 +149,7 @@ export default {
         channel: channelId,
         pubId: "partner-pub-6612490456597819",
         query: queryString,
-        styleId: "6462282781",
+        styleId: "7767580164",
         adsafe: "low",
         ivt: false,
         resultsPageBaseUrl,
