@@ -210,7 +210,7 @@ function handleTACMSGToLoad(){
 }
 
 window.addEventListener('beforeunload',()=>{
-  if(window.location.pathname.includes('/detail')){
+  if(window.location.pathname.includes('/detail') || window._isArticleDetail){
     const detailPvUser = window.getCookie('detailPvUser')
     try{
       const buffer = JSON.parse(detailPvUser)
