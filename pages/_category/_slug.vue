@@ -8,7 +8,10 @@
           <article class="article" v-if="newInfo">
             <h1 class="article-title">{{ newInfo.name }}</h1>
             <div class="news-author">
-              <div>{{ newInfo.author && newInfo.author.name }}</div>
+              <nuxt-link v-if="authorSlug" :to="`/author/${authorSlug}/`" class="author-link">
+                {{ newInfo.author && newInfo.author.name }}
+              </nuxt-link>
+              <span v-else>{{ newInfo.author && newInfo.author.name }}</span>
               <div>{{ newInfo.updated_at }}</div>
             </div>
             <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
@@ -84,6 +87,7 @@
 import { shuffleArray } from "../../utils/utils";
 import Breadcrumb from "../../components/Breadcrumb";
 import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.js";
+import { categoryAuthorMap, authorData } from "../../config/author-links";
 
 export default {
   components: { Breadcrumb },
@@ -207,6 +211,22 @@ export default {
     return {
       channelId: ""
     };
+  },
+  computed: {
+    authorSlug() {
+      if (!this.newInfo) return null;
+      const authorId =
+        (this.newInfo.author && this.newInfo.author.id) ||
+        categoryAuthorMap[this.newInfo.category_id];
+      if (!authorId) return null;
+      const author = authorData[authorId];
+      if (!author) return null;
+      const nameSlug = author.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+      return `${nameSlug}-${authorId}`;
+    }
   },
   head() {
     return {
@@ -420,6 +440,14 @@ export default {
   margin-bottom: 16px;
   font-size: 14px;
   color: rgba($font1, 0.6);
+}
+.author-link {
+  color: rgba($font1, 0.6);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    color: $color1;
+  }
 }
 .article-summary {
   margin: 24px 0 8px;
